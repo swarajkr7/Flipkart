@@ -69,6 +69,14 @@ const CreateAccount = styled(Typography)`
     cursor: pointer;
 `
 
+const Error = styled(Typography)`
+    font-size: 10px,
+    color: #ff6161;
+    line-height: 0;
+    margin-top: 10px;
+    font-weight
+`
+
 const accountInitialValues = {
     login:{
         view: 'login',
@@ -101,12 +109,14 @@ const LoginDialog = ({ open, setOpen }) => {
     const [account, toggleAccount] = useState(accountInitialValues.login)
     const [signup, setSignup] = useState(signupInitialValues)
     const [login, setLogin] = useState(LoginInitialValues);
+    const [error, setError ] = useState(false)
 
     const {setAccount }= useContext(DataContext)
 
   const handleClose = () => {
     setOpen(false);
     toggleAccount(accountInitialValues.login);
+    setError(false);
   }
 
   const toggleSignup = () =>{
@@ -137,6 +147,9 @@ const loginUser =  async () => {
   if (response.status === 200) {
     handleClose();
     setAccount(response.data.data.firstname);
+  }else{
+    setError(true);
+
   }
 }
 
@@ -152,6 +165,7 @@ const loginUser =  async () => {
           { account.view === 'login' ?
                 <Wrapper>
                     <TextField variant="standard" onChange={(e) => onValueChange(e)} name='username' label="Enter Email/Mobile number" />
+                    { error && <Error>Please enter valid username or password</Error>}
                     <TextField variant="standard" onChange={(e) => onValueChange(e)} name='password' label="Enter Password" />
                     <Text>
                     By continuing, you agree to Flipkart's Terms of Use and Privacy
