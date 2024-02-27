@@ -70,11 +70,11 @@ const CreateAccount = styled(Typography)`
 `
 
 const Error = styled(Typography)`
-    font-size: 10px,
+    font-size: 10px;
     color: #ff6161;
     line-height: 0;
     margin-top: 10px;
-    font-weight
+    font-weight: 600;
 `
 
 const accountInitialValues = {
