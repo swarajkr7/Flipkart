@@ -10,6 +10,7 @@ const Component = styled(Box)(({theme}) => ({
     margin: '55px 130px 0px 130px',
     justifyContent: 'space-between',
     overflow: 'hidden',
+    background: '#fff',
     [theme.breakpoints.down('lg')]: {
         margin: 0
     }
@@ -31,6 +32,7 @@ const Container = styled(Box)`
 
 const  NavBar = () =>{
     return (
+        <Box style={{ background: '#fff'}}>
         <Component>
             {
                 navData.map(data => (
@@ -41,6 +43,7 @@ const  NavBar = () =>{
                 ))
             }
         </Component>
+        </Box>
     )
 }
 

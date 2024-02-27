@@ -1,8 +1,9 @@
-
-
-
-import { InputBase, Box, styled } from "@mui/material";
+import { useState, useEffect } from "react";
+import { InputBase, Box, List, ListItem, styled } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { useSelector, useDispatch } from "react-redux";
+import { getProducts } from '../../redux/actions/productActions'; // Corrected import path
+import { Link } from 'react-router-dom';
 
 const SearchContainer = styled(Box)`
     background: #fff;
@@ -22,18 +23,58 @@ const SearchIconwrapper = styled(Box)`
     color: blue;
     padding: 5px;
     display: flex;
-`
+`;
 
-const Search = () =>{
+const ListWrapper = styled(List)`
+    position: absolute;
+    background: #FFFFFF;
+    color: #000;
+    margin-top: 36px;
+`;
+
+const Search = () => {
+    const [text, setText] = useState('');
+    const { products } = useSelector(state => state.getProducts);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getProducts());
+    }, [dispatch]);
+
+    const getText = (text) => {
+         setText(text);
+    };
+
     return (
         <SearchContainer>
             <InputSearchBase
-            placeholder="Search for products, brands amd more"/>
-        <SearchIconwrapper>
-            <SearchIcon/>
-        </SearchIconwrapper>    
+               placeholder="Search for products, brands and more" // Corrected typo in placeholder
+               onChange={(e) => getText(e.target.value)}
+               value={text}
+             />
+            <SearchIconwrapper>
+                <SearchIcon/>
+            </SearchIconwrapper> 
+            {
+                text && 
+                <ListWrapper>
+                    {
+                        products.filter(product => product.title.longTitle.toLowerCase().includes(text.toLowerCase())).map(product => (
+                           <ListItem key={product.id}>
+                                <Link
+                                    to={`/product/${product.id}`} // Corrected string interpolation
+                                    onClick={() => setText('')}
+                                    style={{ textDecoration: 'none', color: 'inherit'}}
+                                >
+                                    {product.title.longTitle}
+                                </Link>
+                           </ListItem>
+                        ))
+                    }
+                </ListWrapper>
+            }   
         </SearchContainer>
-    )
+    );
 }
 
 export default Search;

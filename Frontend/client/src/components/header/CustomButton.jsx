@@ -1,7 +1,11 @@
 import { useContext, useState } from 'react';
 
-import { Box, Button, Typography, styled } from '@mui/material';
+import { Box, Button, Typography,Badge, styled } from '@mui/material';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
+
+import { Link } from 'react-router-dom';
+
+import { UseSelector, useSelector } from 'react-redux';
 
 import { DataContext } from '../../context/DataProvider';
 
@@ -10,20 +14,28 @@ import { DataContext } from '../../context/DataProvider';
 import LoginDialog from '../login/LoginDialog';
 import Profile from './Profile';
 
-const Wrapper = styled(Box)`
-    display: flex;
-    margin: 0 3% 0 auto;
-    & > button, & > p, & > div {
-        margin-right: 40px;
-        font-size: 16px;
-        align-items: center;
+const Wrapper = styled(Box)(({theme}) => ({
+    display: 'flex',
+    margin: '0 3% 0 auto',
+    '& > *': {
+        marginRight: '40px !important',
+        fontSize: 16,
+        alignItems: 'center'
+    },
+    [theme.breakpoints.down('md')]: {
+        display: 'block'
     }
-`;
+}));
 
 
-const Container = styled(Box)`
-    display: flex;
-`;
+const Container = styled(Link)(({ theme }) => ({
+    display: 'flex',
+    textDecoration: 'none',
+    color: 'inherit',
+    [theme.breakpoints.down('md')]: {
+        display: 'block'
+    }
+}));
 
 
 const LoginButton = styled(Button)`
@@ -43,6 +55,8 @@ const CustomButtons = () => {
 
     const { account , setAccount} = useContext(DataContext);
 
+    const { cartItems } = useSelector(state => state.cart);
+
     const openDialog = () => {
         setOpen(true);
     }
@@ -57,9 +71,11 @@ const CustomButtons = () => {
             <Typography style={{ marginTop: 3, width: 135}}>Become a Seller</Typography>
             <Typography style={{ marginTop: 3 }}>More</Typography>
 
-            <Container>
-                <ShoppingCart/>
-                <Typography>Cart</Typography>
+            <Container to="/cart">
+                <Badge badgeContent={cartItems?.length} color="secondary">
+                 <ShoppingCart/>
+                </Badge>
+                <Typography style={{ marginLeft: 10}}>Cart</Typography>
             </Container>
             <LoginDialog open={open} setOpen={setOpen}/>
         </Wrapper>
